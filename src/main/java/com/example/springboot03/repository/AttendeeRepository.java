@@ -29,7 +29,7 @@ public interface AttendeeRepository {
 
     @Select("""
     SELECT * FROM attendees 
-    WHERE attendee_id = #{Id}
+    WHERE attendee_id = #{id}
 """)
     @ResultMap("attendeeMapper")
     Attendee getAttendeeById(Integer id);

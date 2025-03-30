@@ -1,14 +1,18 @@
 package com.example.springboot03.model.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventRequest {
     private String eventName;
-    private String eventDate;
-
+    private LocalDateTime eventDate;
+    private Integer venueId;
+    private List<Integer> attendeeId;
 }
