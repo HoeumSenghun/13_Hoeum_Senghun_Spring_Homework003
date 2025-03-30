@@ -1,5 +1,6 @@
 package com.example.springboot03.service.serviceImpl;
 
+import com.example.springboot03.exception.BadRequestException;
 import com.example.springboot03.exception.NotFoundException;
 import com.example.springboot03.model.dto.request.VenueRequest;
 import com.example.springboot03.model.entity.Venue;
@@ -25,7 +26,7 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public Venue addVenue(VenueRequest venueRequest) {
-        if (venueRequest == null || venueRequest.getName().isEmpty()) {
+        if (venueRequest == null || venueRequest.getVenueName().isEmpty()) {
             throw new BadRequestException("Invalid venue data");
         }
         return venueRepository.addVenue(venueRequest);
