@@ -15,6 +15,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalException {
 
+    // Handle NotFoundException
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleNotFoundException(NotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
@@ -22,6 +23,7 @@ public class GlobalException {
         return problemDetail;
     }
 
+    // Handle BadRequestException
     @ExceptionHandler(BadRequestException.class)
     public ProblemDetail handleBadRequestException(BadRequestException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -29,6 +31,7 @@ public class GlobalException {
         return problemDetail;
     }
 
+    // Handle validation exceptions from @Valid annotations
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationException(MethodArgumentNotValidException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
@@ -40,18 +43,20 @@ public class GlobalException {
         }
 
         problemDetail.setProperty("errors", errors);
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
         return problemDetail;
     }
 
+    // Handle validation for method parameters
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ProblemDetail handleMethodValidationException(HandlerMethodValidationException e) {
         Map<String, String> errors = new HashMap<>();
 
         e.getParameterValidationResults().forEach(parameterError -> {
-            String paramName = parameterError.getMethodParameter().getParameterName(); // Get parameter name
+            String paramName = parameterError.getMethodParameter().getParameterName();
 
             for (var messageError : parameterError.getResolvableErrors()) {
-                errors.put(paramName, messageError.getDefaultMessage()); // Store error message
+                errors.put(paramName, messageError.getDefaultMessage());
             }
         });
 
@@ -65,4 +70,27 @@ public class GlobalException {
         return problemDetail;
     }
 
+    // Handle generic internal server error
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleInternalServerError(Exception e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return problemDetail;
+    }
+
+    // Handle UnauthorizedException
+    @ExceptionHandler(UnauthorizedException.class)
+    public ProblemDetail handleUnauthorizedException(UnauthorizedException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return problemDetail;
+    }
+
+    // Handle ResourceConflictException
+    @ExceptionHandler(ResourceConflictException.class)
+    public ProblemDetail handleResourceConflictException(ResourceConflictException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return problemDetail;
+    }
 }
