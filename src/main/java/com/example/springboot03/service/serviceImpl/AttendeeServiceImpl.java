@@ -1,5 +1,6 @@
 package com.example.springboot03.service.serviceImpl;
 
+import com.example.springboot03.exception.BadRequestException;
 import com.example.springboot03.exception.NotFoundException;
 import com.example.springboot03.model.dto.request.AttendeeRequest;
 import com.example.springboot03.model.entity.Attendee;
@@ -20,12 +21,12 @@ public class AttendeeServiceImpl implements AttendeeService {
     @Override
     public List<Attendee> getAllAttendees(Integer offset, Integer limit) {
         Integer page = (offset - 1) * limit;
-        return attendeeRepository.getAllAttendees(page, limit);
+        return attendeeRepository.getAllAttendee(page, limit);
     }
 
     @Override
     public Attendee addAttendee(AttendeeRequest attendeeRequest) {
-        if (attendeeRequest == null || attendeeRequest.getName().isEmpty()) {
+        if (attendeeRequest == null || attendeeRequest.getAttendeeName().isEmpty()) {
             throw new BadRequestException("Invalid attendee data");
         }
         return attendeeRepository.addAttendee(attendeeRequest);
