@@ -8,4 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventAttendee {
+    private Integer event_attendee_id;
+    private Integer attendee_id;
+    private Integer event_id;
 }

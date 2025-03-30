@@ -8,4 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventRequest {
+    private String eventName;
+    private String eventDate;
+
 }
