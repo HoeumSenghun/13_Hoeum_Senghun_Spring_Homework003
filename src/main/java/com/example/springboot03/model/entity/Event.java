@@ -15,5 +15,5 @@ public class Event {
     private String eventName;
     private LocalDateTime eventDate;
     private Venue venue;
-    private List<Integer> attendeeId;
+    private List<Attendee> attendee;
 }

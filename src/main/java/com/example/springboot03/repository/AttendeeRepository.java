@@ -2,6 +2,7 @@ package com.example.springboot03.repository;
 
 import com.example.springboot03.model.dto.request.AttendeeRequest;
 import com.example.springboot03.model.entity.Attendee;
+import com.example.springboot03.model.entity.EventAttendee;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -33,6 +34,15 @@ public interface AttendeeRepository {
 """)
     @ResultMap("attendeeMapper")
     Attendee getAttendeeById(Integer id);
+
+
+    @Select("""
+    SELECT a.* FROM attendees a
+    INNER JOIN event_attendee e ON e.attendee_id = a.attendee_id
+    WHERE e.event_id = #{id}
+""")
+    @ResultMap("attendeeMapper")
+    List<EventAttendee> getAllEventAttendee(Integer id);
 
     @Select("""
     UPDATE attendees

@@ -32,22 +32,36 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event addEvent(EventRequest eventRequest) {
-        // Map EventRequest to Event entity
-        Event event = new Event();
-        event.setEventName(eventRequest.getEventName());
-        event.setEventDate(eventRequest.getEventDate());
+        Event event = eventRepository.addEvent(eventRequest);
 
-        // Insert the event into the database and retrieve the generated eventId
-        event = eventRepository.addEvent(eventRequest);  // MyBatis will populate eventId here
-
-        // Handle attendee mapping if applicable
-        if (eventRequest.getAttendeeId() != null && !eventRequest.getAttendeeId().isEmpty()) {
-            for (Integer attendeeId : eventRequest.getAttendeeId()) {
-                eventAttendeeRepository.addEventAttendee(event.getEventId(), attendeeId);
-            }
+        for (Integer e: eventRequest.getAttendeeId()){
+            System.out.println(eventRequest.getAttendeeId());
+            System.out.println("attendee id:"+ e);
+            System.out.println(eventRequest.getAttendeeId()+"event");
+            eventRepository.addEventAttendee(event.getEventId(),e);
         }
-
-        return event;  // Return the event object with eventId set
+        return eventRepository.getEventById(event.getEventId());
     }
+
+
+//    @Override
+//    public Event addEvent(EventRequest eventRequest) {
+//        // Map EventRequest to Event entity
+//        Event event = new Event();
+//        event.setEventName(eventRequest.getEventName());
+//        event.setEventDate(eventRequest.getEventDate());
+//
+//        // Insert the event into the database and retrieve the generated eventId
+//        event = eventRepository.addEvent(eventRequest);  // MyBatis will populate eventId here
+//
+//        // Handle attendee mapping if applicable
+//        if (eventRequest.getAttendeeId() != null && !eventRequest.getAttendeeId().isEmpty()) {
+//            for (Integer attendeeId : eventRequest.getAttendeeId()) {
+//                eventAttendeeRepository.addEventAttendee(event.getEventId(), attendeeId);
+//            }
+//        }
+//
+//        return event;  // Return the event object with eventId set
+//    }
 
 }

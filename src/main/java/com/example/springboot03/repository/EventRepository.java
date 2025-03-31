@@ -10,10 +10,7 @@ import java.util.List;
 public interface EventRepository {
 
     @Select("""
-    SELECT e.event_id, e.event_name, e.event_date, e.venue_id, a.attendee_id
-    FROM events e
-    LEFT JOIN event_attendees ea ON ea.event_id = e.event_id
-    LEFT JOIN attendees a ON ea.attendee_id = a.attendee_id
+    SELECT * FROM events
     OFFSET #{page} LIMIT #{limit}
     """)
     @Results(id = "eventsMapper", value = {
@@ -22,8 +19,8 @@ public interface EventRepository {
             @Result(property = "eventDate", column = "event_date"),
             @Result(property = "venue", column = "venue_id",
                     one = @One(select = "com.example.springboot03.repository.VenueRepository.getVenueById")),
-            @Result(property = "attendeeId", column = "attendee_id",
-                    many = @Many(select = "com.example.springboot03.repository.AttendeeRepository.getAttendeeById"))
+            @Result(property = "attendee", column = "event_id",
+                    many = @Many(select = "com.example.springboot03.repository.AttendeeRepository.getAllEventAttendee"))
     })
     List<Event> getAllEvents(Integer page, Integer limit);
 
@@ -36,9 +33,15 @@ public interface EventRepository {
 
     @Select("""
     INSERT INTO events (event_name, event_date, venue_id)
-    VALUES (#{eventName}, #{eventDate}, #{venueId})
+    VALUES (#{request.eventName}, #{request.eventDate}, #{request.venueId})
+    RETURNING *
 """)
-//    @ResultMap("eventsMapper")
-    @Options(useGeneratedKeys = true, keyProperty = "eventId")
-    Event addEvent(EventRequest eventRequest);
+    @ResultMap("eventsMapper")
+    Event addEvent(@Param("request") EventRequest eventRequest);
+
+    @Select("""
+    INSERT INTO event_attendee (event_id, attendee_id)
+    VALUES (#{eventId}, #{attendeeId})
+""")
+    void addEventAttendee(Integer eventId, Integer attendeeId);
 }
