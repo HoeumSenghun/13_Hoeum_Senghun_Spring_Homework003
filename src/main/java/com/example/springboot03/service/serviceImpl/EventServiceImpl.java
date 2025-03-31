@@ -43,25 +43,17 @@ public class EventServiceImpl implements EventService {
         return eventRepository.getEventById(event.getEventId());
     }
 
+    @Override
+    public Event updateEventById(Integer id, EventRequest eventRequest) {
+        eventRepository.updateEventById(id, eventRequest);
 
-//    @Override
-//    public Event addEvent(EventRequest eventRequest) {
-//        // Map EventRequest to Event entity
-//        Event event = new Event();
-//        event.setEventName(eventRequest.getEventName());
-//        event.setEventDate(eventRequest.getEventDate());
-//
-//        // Insert the event into the database and retrieve the generated eventId
-//        event = eventRepository.addEvent(eventRequest);  // MyBatis will populate eventId here
-//
-//        // Handle attendee mapping if applicable
-//        if (eventRequest.getAttendeeId() != null && !eventRequest.getAttendeeId().isEmpty()) {
-//            for (Integer attendeeId : eventRequest.getAttendeeId()) {
-//                eventAttendeeRepository.addEventAttendee(event.getEventId(), attendeeId);
-//            }
-//        }
-//
-//        return event;  // Return the event object with eventId set
-//    }
+        eventAttendeeRepository.deleteEventAttendeeByEventId(id);
+
+        for (Integer e: eventRequest.getAttendeeId()){
+            eventAttendeeRepository.addEventAttendee(id,e);
+        }
+        return eventRepository.updateEventById(id, eventRequest);
+    }
+
 
 }

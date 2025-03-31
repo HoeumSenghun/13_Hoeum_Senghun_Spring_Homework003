@@ -58,4 +58,19 @@ public class EventController {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+
+    @PutMapping("/{event-id}")
+    public ApiResponse<Event> updateEventById(@PathVariable ("event-id") Integer id, @RequestBody EventRequest eventRequest) {
+        Event event = eventService.updateEventById(id, eventRequest);
+        return ApiResponse.<Event>builder()
+                .success(true)
+                .message("Event Update successfullly")
+                .status(HttpStatus.OK)
+                .payload(event)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+
+
 }

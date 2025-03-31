@@ -71,12 +71,12 @@ public class GlobalException {
     }
 
     // Handle generic internal server error
-    @ExceptionHandler(Exception.class)
-    public ProblemDetail handleInternalServerError(Exception e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        problemDetail.setProperty("timestamp", LocalDateTime.now());
-        return problemDetail;
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ProblemDetail handleInternalServerError(Exception e) {
+//        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+//        problemDetail.setProperty("timestamp", LocalDateTime.now());
+//        return problemDetail;
+//    }
 
     // Handle UnauthorizedException
     @ExceptionHandler(UnauthorizedException.class)

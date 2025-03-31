@@ -4,13 +4,22 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface EventAttendeeRepository {
-    @Insert("""
+    @Select("""
     INSERT INTO event_attendee (event_id, attendee_id)
     VALUES (#{eventId}, #{attendeeId})
+
 """)
-    @Results(id = "EAMapper", value = {
+    @Results(id = "eaMapper", value = {
             @Result(property = "eventId", column = "event_id"),
             @Result(property = "attendeeId", column = "attendee_id")
     })
-    void addEventAttendee(@Param("eventId") Integer eventId, @Param("attendeeId") Integer attendeeId);
+    void addEventAttendee( Integer eventId, Integer attendeeId);
+
+    @Select("""
+    DELETE FROM event_attendee
+    WHERE event_id = #{id}
+    
+""")
+    @ResultMap("eaMapper")
+    void deleteEventAttendeeByEventId(Integer id);
 }

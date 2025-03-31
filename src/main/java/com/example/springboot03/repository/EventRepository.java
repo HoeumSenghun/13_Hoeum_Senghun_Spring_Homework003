@@ -44,4 +44,16 @@ public interface EventRepository {
     VALUES (#{eventId}, #{attendeeId})
 """)
     void addEventAttendee(Integer eventId, Integer attendeeId);
+
+    @Select("""
+    UPDATE events
+    SET event_name = #{request.eventName},
+        event_date = #{request.eventDate},
+        venue_id = #{request.venueId}
+    WHERE event_id = #{id}
+    RETURNING *
+""")
+    @ResultMap("eventsMapper")
+    @Result(property = "venueId", column = "venue_id")
+    Event updateEventById(Integer id, @Param("request") EventRequest eventRequest);
 }
